@@ -1,0 +1,172 @@
+
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+ <div th:fragment="list">
+<script type="text/javaScript" defer="defer">
+
+$(function() {
+	
+	let dd = new Date();
+	let year = dd.getFullYear(); // 년
+	let month = dd.getMonth();   // 월
+	let day = dd.getDate();      // 일
+
+	$('input:radio[name=ttoday]:input[value="today"]').attr("checked", true);	// 선택
+
+	let date = new Date().toLocaleDateString().replace(/\./g, '').replace(/\s/g, '-');
+	
+	let radioVal = $("input[name='ttoday']:checked").val(date);
+	let sday = $("#startDt").val(date);
+	let fday = $("#endDt").val(date);	
+	
+	
+	$("#ttoday").on('click',function(){
+		  let radioVal = $("input[name='ttoday']:checked").val(date);
+		  let sday = $("#startDt").val(date);
+		  let fday = $("#endDt").val(date);
+	});
+	
+	
+	$("#tday3").on('click',function(){
+		  let day3 = new Date(year, month, day - 3).toLocaleDateString().replace(/\./g, '').replace(/\s/g, '-');
+		  let sday = $("#startDt").val(day3);
+		  let fday = $("#endDt").val(date);	
+				
+	});
+	
+	$("#tday7").on('click',function(){
+		  let day7 = new Date(year, month, day - 7).toLocaleDateString().replace(/\./g, '').replace(/\s/g, '-');
+		  let sday = $("#startDt").val(day7);
+		  let fday = $("#endDt").val(date);	
+	});
+	
+	$("#tmonth1").on('click',function(){
+			let month1 = new Date(year, month - 1, day).toLocaleDateString().replace(/\./g, '').replace(/\s/g, '-');
+	     	let sday = $("#startDt").val(month1);
+		    let fday = $("#endDt").val(date);	
+	});
+	
+	$("#tmonth3").on('click',function(){
+		let month3 = new Date(year, month - 3, day).toLocaleDateString().replace(/\./g, '').replace(/\s/g, '-');
+		let sday = $("#startDt").val(month3);
+	    let fday = $("#endDt").val(date);
+	});
+
+
+    $(".datepicker[type=text]").datepicker(
+       {
+          dateFormat: 'yy-mm-dd',
+          monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월','7월', '8월', '9월', '10월', '11월', '12월'],
+          dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+          weekHeader: 'Wk',
+          changeMonth: true, // 월변경가능
+          changeYear: true, // 년변경가능
+          yearRange: '2000:+5', // 연도 셀렉트 박스 범위
+          showMonthAfterYear: true, // 년 뒤에 월 표시
+          autoSize: true, // 오토리사이즈(body등 상위태그의 설정에 따른다)
+
+       });
+	
+    $("#btnRegist").on('click', function() {
+		 window.location.href = "/board/boardRegist";
+		});
+
+    $("#btnDelete").on('click', function() {
+			var rowid2 = $("#list2").getGridParam("selarrrow");
+			var array = new Array();
+			
+			for (var i = 0; i < 1; i++) {
+
+				  var selRowData = $("#list2").getRowData(rowid2[i]);
+	
+			array.push(selRowData)
+		}
+			
+	$.ajax({
+		url : '/board/boardDelete',
+		type : 'POST',
+		data : JSON.stringify({
+			array : array
+		}),
+		contentType : "application/json",
+		dataType : "json",
+		success : function(data) {
+			alert("게시글 삭제 성공!");
+			window.location.href = "/board/boardList";
+		},
+		error : function(data) {
+			alert("게시글 삭제 실패!");
+		}
+	})
+});
+
+		$("#list2").jqGrid({
+			datatype : 'json',
+			mtype : "GET",
+			url : "/board/boardListAction",
+			contentType : "application/json; charset-utf-8",
+			colNames : [ 'idx', '제목', '작성자', '내용', '등록일', '좋아요' ],
+			colModel : [ {
+				name : 'idx',
+				index : 'idx',
+				align : 'center'
+			}, {
+				name : 'title',
+				index : 'title',
+				align : 'center',
+				editable:true
+			}, {
+				name : 'writer',
+				index : 'writer',
+				align : 'center',
+				editable:true
+			}, {
+				name : 'content',
+				index : 'content',
+				align : 'center',
+				editable:true
+			}, {
+				name : 'ins_date',
+				index : 'ins_date',
+				align : 'center'
+			}, {
+				name : 'view_cnt',
+				index : 'view_cnt',
+				align : 'center'
+			} ],
+			autowidth : true,
+			rownumbers : true, // (순번 노출)
+			multiselect : true, //(checkbox 노출)
+			width : 'auto',
+			rowNum : 10, // 한화면에 보여줄 row의 수
+			rowList : [ 10, 20, 30 ], // 한 화면에서 볼 수 있는 row의 수를 조절 가능
+			pager : '#pager',
+			editable:true,
+			onSelectRow : function(rowid, e) {
+				
+				 var click = $("#list2").jqGrid("getRowData",rowid);
+				 
+				 console.log(JSON.stringify(click));
+ 				 console.log(click.idx);
+
+				window.location.href = "/board/boardDetail?click.idx ="+click.idx ;
+			},
+			pgbuttons : true,
+			sortable : false,
+			jsonReader : {
+				root : "result",
+				repeatitems : false
+			},
+			loadComplete : function(data) {
+				let json = JSON.stringify(data);
+			},
+			loadtext : '로딩중..',
+			loadError : function() {
+				alert("Error~!!");
+			},
+			height : 250
+		});
+		
+	});
+</script>
+</div>
+</th:block>

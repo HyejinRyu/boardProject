@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">
+
+<sql id="userColmm">
+	id 
+	,user_name 
+	,user_yn
+	,user_auth
+	
+	</sql>
+	<!--  중복아이디 찾기   -->
+	<select id="findId" parameterType="String" resultType="int">
+select count(*) from user where id = #{id}	
+</select>
+
+	<insert id="joinUser" parameterType="java.util.List">
+	INSERT INTO user(
+					id
+					,pwd
+					,user_name
+					,user_yn
+					,ins_date
+				
+		)VALUES(
+					
+					#{id}
+					,#{pwd}
+					,#{user_name}
+					,'Y'
+					,current_timestamp
+					
+		)
+	</insert>
+	
+	<select id="userList" parameterType="com.board.user.vo.UserVo" resultType="com.board.user.vo.UserVo">
+	SELECT Z.*, @RN := @RN +1 AS NUM
+		FROM(
+		SELECT idx 
+			,id
+			, user_name
+			,user_yn
+			,user_auth
+			,ins_date
+			FROM user
+			WHERE 1 = 1
+			ORDER BY IDX ASC
+			)Z , (SELECT @RN := 0)R
+	
+	</select>
+
+
+<select id="userDetail" parameterType="String" resultType="com.board.user.vo.UserVo">
+			SELECT 
+			<include refid="userColmm"/>
+		FROM
+			user
+		WHERE
+			id = #{id}		
+	</select>
+	<!--  유저  삭제 -->
+	<delete id="userDelete"  parameterType="string">
+		UPDATE user 
+	 	SET  USER_YN = 'N' 
+	 	WHERE id = #{id}
+</delete>
+
+	
+<insert id="deleteUser" parameterType="String">
+	INSERT INTO deleteUser (
+	                     id
+						, user_name
+						, user_yns
+						)
+					SELECT
+						id
+						,user_name
+						,'N'
+					FROM user
+					WHERE id = #{id};
+	</insert>
+	
+		<!--  아이디 찾기   -->
+	<select id="searchId" parameterType="String" resultType="com.board.user.vo.UserVo">
+select * from user where id = #{id}	
+</select>
+</mapper>

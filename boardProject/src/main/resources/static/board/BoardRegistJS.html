@@ -1,0 +1,42 @@
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block layout:fragment="script">
+<script type="text/javaScript" defer="defer">
+$(function() {
+	$("#enroll").on('click',function(){
+		if($('#title').val() ==""){
+			alert('제목을 입력해주세요');
+			return false;
+		}
+		if($('#writer').val() == ""){
+			alert('작성자를 입력해주세요');
+			return false;
+		}
+		if($('#content').val() ==""){
+			alert('내용을 입력해주세요');
+			return false;
+		}
+		var params = {
+				title  : $("#title").val()
+			   ,writer : $("#writer").val()
+			   ,content : $("#content").val()
+		}
+		$.ajax({
+			type: 'POST',  
+			url : '/board/boardRegistAction', 
+			contentType : 'application/json',
+			dataType:'json', 
+			data: JSON.stringify(params),
+			success: function(data){   
+				
+				alert("게시글 등록 성공!"); 
+				 window.location.href = "BoardList.html";
+			},
+			error:function(data){   
+				alert("게시글 등록 실패!");
+			}
+		})
+})
+
+});
+</script>
+</th:block>

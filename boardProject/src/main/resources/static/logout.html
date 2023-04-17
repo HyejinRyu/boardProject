@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+</head>
+<body>
+  <!-- /@{/lognout} 으로 로그아웃 요청 POST -->
+  <!-- LogoutFilter가 처리 -->
+  <form th:action="@{/lognout}" method="post">
+    <p><input type="submit" value="Logout"/></p>
+  </form>
+</body>
+</html>

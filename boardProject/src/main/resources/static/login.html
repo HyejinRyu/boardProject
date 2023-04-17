@@ -1,0 +1,46 @@
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.thymeleaf.org">
+<head>
+<script src="/js/jquery-1.7.2.min.js" type="text/javascript"></script> 
+<script src="/js/i18n/grid.locale-kr.js" type="text/javascript"></script>
+<script src="/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/ui-lightness/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="http://www.ok-soft-gmbh.com/jqGrid/jquery.jqGrid-4.1.1/css/ui.jqgrid.css" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css" />  
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	alert('ddd');
+	
+$(document).on('click', '#login', function(e) {
+	console.log(e);
+	 $('#LoginForm').attr("action",'/member/loginProc').submit();
+});
+	});
+</script>
+<meta charset="UTF-8">
+   <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <!-- /signin 으로 로그인 요청 POST -->
+    <!-- UsernamePasswordAuthenticationFilter가 처리 -->
+    <form method="get" id="LoginForm">
+		<table>
+			<tr>
+				<td>아이디</td>
+				<td><input type="text" id= "userName" name="userName" value=""/></td>
+			</tr>
+			<tr>
+				<td>패스워드</td>
+				<td><input type="password" id="password" name="password" value=""/></td>
+			</tr>
+		</table>
+		<button type="button" id="login">로그인</button>
+	</form>
+</body>
+</html>

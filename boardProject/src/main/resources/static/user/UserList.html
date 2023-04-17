@@ -1,0 +1,77 @@
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<h2>사용자 관리</h2>
+</head>
+
+<!-- newUser -->
+<form>
+<!-- <table > -->
+<!-- <thead> -->
+<!-- <tr> -->
+<!-- <td><input type="checkbox"/></td> -->
+<!-- <td>유저 아이디</td> -->
+<!-- <td>유저 이름</td> -->
+<!-- <td>권한</td> -->
+<!-- <td>사용여부</td> -->
+<!-- <td>마지막 로그인 일시</td> -->
+<!-- </tr> -->
+<!-- </thead> -->
+<!-- <tbody> -->
+<!-- <tr th:each="item : ${user}"> -->
+<!-- 		<td><input type="checkbox"/></td> -->
+<!-- 		<td th:text="${item.id}">no</td> -->
+<!-- 		<td th:text="${item.id}">title</td> -->
+<!-- 		<td th:text="${item.user_name}">title</td> -->
+<!-- 		<td th:text="${item.user_name}">title</td> -->
+<!-- 		<td th:text="${item.ins_date}">title</td> -->
+		
+<!-- 	</tr> -->
+<!-- 		</tbody> -->
+<!-- </table> -->
+
+<body>
+<div>
+<input type="button" id="userDelete" value="삭제">
+</div>
+<table style='width:600px;table-layout:fixed'>
+  <thead>
+    <tr>
+      <td><input type="checkbox" id="allCk" name="allCk"></td>
+      <td>아이디</td>
+      <td>이름</td>
+      <td>권한</td>
+      <td>사용여부</td>
+      <td>마지막로그인</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="UserList:${user}">
+<!--       <td><input type="checkbox" name="delChk"></td> -->
+     <td>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="chk" id="chk1" class="chk" th:value="${UserList.id}">
+                                </label>
+                                </td>
+                          <td><a th:href="@{|/user/userDetail?id=${UserList.id}|}" th:text="${UserList.id}"></a></td>
+                            <td><a th:text="${UserList.user_name}" ></a></td>
+                            <td th:text="${UserList.user_auth}"></td>
+                            <td th:text="${UserList.user_yn}"></td>
+                               <td th:text="${UserList.ins_date}"></td>
+<!--                             <td th:text="${#temporals.format(UserList.ins_date, 'yyyy-MM-dd')}"></td> -->
+                        </tr>
+  </tbody>
+</table>
+</body>
+
+</form>
+<div th:insert="~{user/UserListJS :: userList}"></div>
+</body>
+</html>

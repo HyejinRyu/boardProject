@@ -1,0 +1,20 @@
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block layout:fragment="script">
+<script type="text/javaScript" defer="defer">
+$(function() {
+	$("#list").on('click', function() {
+       	  window.location.href="/board/boardList";
+		
+	});
+	$(document).on('click', '#edit', function(e) {
+		
+	if (confirm("정말 수정하시겠습니까 ?") == true) {
+			$("#UpdateForm").submit();
+			
+	} else {			
+		return;
+		}
+	});
+});
+</script>
+	</th:block>

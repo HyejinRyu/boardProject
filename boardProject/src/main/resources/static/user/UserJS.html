@@ -1,0 +1,92 @@
+
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+ <div th:fragment="user">
+<script type="text/javaScript" defer="defer">
+
+$(function(){
+	$("#idCheckBtn").on('click',function(){
+		
+		var id = $('#userId').val();
+
+		$.ajax({
+			type: 'POST', 
+			url:'/user/idChkAction', 
+			dataType:'json',
+// 			DATA : JSON.STRINGIFY({,
+// 			CONTENTTYPE: "APPLICATION/JSON; CHARSET=UTF-8",
+// 			DATA: JSON.STRINGIFY({ID: ID
+// 			}),
+			contentType:"application/text"
+			,data:id,
+			
+// 			beforeSend: function (jqXHR, settings) {
+// 			    var header = $("meta[name='_csrf_header']").attr("content");
+// 			    var token = $("meta[name='_csrf']").attr("content");
+		 
+// 		           jqXHR.setRequestHeader(header, token);
+// 			},
+			success: function(data){   
+			
+		if(data.idCheck > 0 ) {
+		   alert('중복된 아이디 입니다.');
+		    document.getElementById("userId").value ='';
+		}else{
+			 alert('아이디등록가능합니다.');
+		}
+			},
+		})
+	})
+// 	var pwdChk = ^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$ %^&*-]).{10,}$ ;
+	//영문 대소문자, 숫자 특수문자 최소 한 개씩 포함하는 10자 이상의 비밀번호
+		var idChk = /^[a-z]+[a-z0-9]{5,19}$/g;
+		//영문자로 시작하는 영문자 또는 숫자 6~20자 
+		$("#userSub").on('click',function(){
+		if($("#userId").val() ==''){
+			alert('아이디채어줘');
+			$("#userId").focus();
+			return false;
+		}
+		if($("#userPw").val() ==''){
+			alert('userPws채어줘');
+			$("#userPw").focus();
+			return false;
+		}
+		if($("#userName").val() ==''){
+			alert('userNames채어줘');
+			$("#userName").focus();
+			return false;
+		}
+		
+	 	$("#userSub").on('click', function(){
+
+             var data ={
+            		id  : $("#userId").val()
+         			,pwd : $("#userPw").val()
+         			,name : $("#userName").val()
+             }
+             console.log(data);
+             if (confirm("회원 등록하시겠습니까 ?") == true) {
+            	 
+             $.ajax({
+                 type: 'POST',  
+                 url : '/user/joinUser', 
+                 contentType : 'application/json',
+                 dataType:'json', 
+                 data: JSON.stringify(data),
+                 success: function(data){   
+                 console.log(data.userVo.id);
+                 
+                                  alert("성공했습니다.")
+                 window.location.href = "/user/userList?data.userVo.id="+data.userVo.id;
+                 },
+                 error:function(data){   
+                    alert("실패했습니다.")
+                 }
+              })
+             }
+         })
+      })
+	})
+</script>
+</div>
+</th:block>

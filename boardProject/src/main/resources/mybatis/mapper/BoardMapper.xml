@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardMapper">
+
+<sql id="boardColumns">
+		idx
+		,title
+		,writer
+		,content
+		,ins_date
+		,view_cnt
+	
+	</sql>
+
+	<!--  게시판 등록 -->
+	<insert id="insertBoard" parameterType="map">
+		INSERT INTO board(
+					title
+					,writer
+					,content
+					,ins_date
+					,view_cnt
+		)VALUES(
+					
+					#{title}
+					,#{writer }
+					,#{content }
+					,current_timestamp
+					,0
+		)
+	</insert>
+	
+	
+	
+	
+	
+	
+	<!--  게시판 리스트 -->
+	<select id="boardList" parameterType="com.board.bo.vo.BoardVo"  resultType="com.board.bo.vo.BoardVo">
+		SELECT Z.*, @RN := @RN +1 AS NUM
+		FROM(
+		SELECT IDX
+			, TITLE
+			, WRITER
+			, CONTENT
+			, INS_DATE
+			, VIEW_CNT
+			FROM board
+			WHERE 1 = 1
+			ORDER BY IDX ASC
+			)Z , (SELECT @RN := 0)R
+	</select>
+	
+	
+	<!--  게시판 삭제 -->
+	<delete id="boardDelete" parameterType="java.util.List">
+	DELETE FROM board
+	<where> 
+		<foreach collection="list" item="item" open="" close="" separator="OR"> 
+		(IDX = #{item.idx}) 
+		</foreach> 
+	</where> 
+</delete>
+
+<select id="boardDetail" parameterType="int" resultType="com.board.bo.vo.BoardVo">
+			SELECT 
+			<include refid="boardColumns"/>
+		FROM
+			board
+		WHERE
+			idx = #{idx}		
+	</select>
+	
+	
+	<!--게시글 업데이트  -->
+	<update id="boardUpdate" parameterType="com.board.bo.vo.BoardVo">
+		update board set
+		title = #{title}
+		,content = #{content}
+		where
+		idx = #{idx}
+	</update>
+</mapper>
